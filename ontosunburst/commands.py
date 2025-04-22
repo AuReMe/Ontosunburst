@@ -5,18 +5,19 @@ import argparse
 def get_command_line_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input', '-i', type=str, required=True, help='Interest set input')
-    parser.add_argument('--ref', '-ir', type=str, required=False, help='Reference set input')
+    parser.add_argument('--ref', '-r', type=str, required=False, help='Reference set input')
     parser.add_argument('--ontology', '--onto', type=str, required=False, help='Ontology used')
-    parser.add_argument('--root', '-r', type=str, required=False, help='Ontology root')
+    parser.add_argument('--input_root', '-ir', type=str, required=False, help='Ontology root')
     parser.add_argument('--analysis', '-a', type=str, required=False, default=TOPOLOGY_A,
                         help='Type of analysis')
     parser.add_argument('--output', '-o', type=str, required=False, default='sunburst',
                         help='Output path+name')
-    parser.add_argument('--class_ontology', '-cl', type=str, required=False,
+    parser.add_argument('--ontology_dag', '-od', type=str, required=False,
                         help='Class ontology json file')
-    parser.add_argument('--labels', '-l', type=str, required=False, default=DEFAULT,
-                        help='Labels json file')
-    parser.add_argument('--url', type=str, required=False, help='Endpoint URL (SPARQL server)')
+    parser.add_argument('--id_to_labels', '-itl', type=str, required=False,
+                        help='IDs to labels json file')
+    parser.add_argument('--no_labels', '-nl', action='store_false', required=False, default=True,
+                        help='Show labels ')
     parser.add_argument('--test', '-t', type=str, required=False, default=BINOMIAL_TEST,
                         help='Enrichment stat test')
     parser.add_argument('--rcut', type=str, required=False, default=ROOT_CUT,
@@ -46,7 +47,7 @@ def main():
     metabolic_objects, abundances, scores = extract_input(args.input)
     ontosunburst(interest_set=metabolic_objects,
                  ontology=args.ontology,
-                 root=args.root,
+                 input_root=args.input_root,
                  abundances=abundances,
                  scores=scores,
                  reference_set=reference_set,
@@ -54,9 +55,9 @@ def main():
                  analysis=args.analysis,
                  output=args.output,
                  write_output=True,
-                 class_ontology=args.class_ontology,
-                 labels=args.labels,
-                 endpoint_url=args.url,
+                 ontology_dag_input=args.ontology_dag,
+                 id_to_label_input=args.id_to_labels,
+                 labels=args.no_labels,
                  test=args.test,
                  root_cut=args.rcut,
                  path_cut=args.pcut,

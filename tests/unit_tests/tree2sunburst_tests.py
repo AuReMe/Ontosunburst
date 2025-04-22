@@ -7,8 +7,7 @@ import copy
 from functools import wraps
 from unittest.mock import patch
 
-from ontosunburst.ontology import ROOTS, METACYC
-from ontosunburst.sunburst_fig import *
+from ontosunburst.tree2sunburst import *
 
 """
 Tests manually good file creation.
@@ -21,22 +20,24 @@ No automatic tests integrated.
 
 # Complex topology
 # --------------------------------------------------------------------------------------------------
+
+ROOT = 'root'
 MC_ONTO = {'a': ['ab'], 'b': ['ab'], 'c': ['cde', 'cf'], 'd': ['cde'], 'e': ['cde', 'eg'],
            'f': ['cf'], 'g': ['gh', 'eg'], 'h': ['gh'],
-           'ab': [ROOTS[METACYC]], 'cde': ['cdecf', 'cdeeg'], 'cf': ['cdecf'],
-           'eg': ['cdeeg', ROOTS[METACYC]], 'gh': [ROOTS[METACYC]],
-           'cdecf': [ROOTS[METACYC]], 'cdeeg': ['cdeeg+'], 'cdeeg+': [ROOTS[METACYC]]}
+           'ab': [ROOT], 'cde': ['cdecf', 'cdeeg'], 'cf': ['cdecf'],
+           'eg': ['cdeeg', ROOT], 'gh': [ROOT],
+           'cdecf': [ROOT], 'cdeeg': ['cdeeg+'], 'cdeeg+': [ROOT]}
 
-MC_AB = {'FRAMES': 6, 'cde': 3, 'cf': 3, 'cdecf': 3, 'cdeeg+': 3, 'cdeeg': 3, 'c': 3, 'ab': 3,
+MC_AB = {ROOT: 6, 'cde': 3, 'cf': 3, 'cdecf': 3, 'cdeeg+': 3, 'cdeeg': 3, 'c': 3, 'ab': 3,
          'b': 2, 'a': 1}
-MC_REF_AB = {'FRAMES': 36, 'cdeeg+': 19, 'cdeeg': 19, 'cdecf': 18, 'gh': 15, 'eg': 12, 'cde': 12,
+MC_REF_AB = {ROOT: 36, 'cdeeg+': 19, 'cdeeg': 19, 'cdecf': 18, 'gh': 15, 'eg': 12, 'cde': 12,
              'cf': 9, 'h': 8, 'g': 7, 'f': 6, 'e': 5, 'd': 4, 'c': 3, 'ab': 3, 'b': 2, 'a': 1}
 
-MC_LABELS = {'FRAMES': 'Root', 'cdeeg+': 'CDEEG+', 'cdeeg': 'CDEEG', 'cdecf': 'CDECF', 'gh': 'GH',
+MC_LABELS = {ROOT: 'Root', 'cdeeg+': 'CDEEG+', 'cdeeg': 'CDEEG', 'cdecf': 'CDECF', 'gh': 'GH',
              'eg': 'EG', 'cde': 'CDE', 'cf': 'CF', 'h': 'H', 'g': 'G', 'f': 'F', 'e': 'E', 'd': 'D',
              'c': 'C', 'ab': 'AB', 'b': 'B'}
-MC_DATA = DataTable()
-MC_DATA.fill_parameters(MC_AB, MC_REF_AB, MC_ONTO, ROOTS[METACYC], MC_LABELS)
+MC_DATA = TreeData()
+MC_DATA.dag_to_tree(MC_AB, MC_REF_AB, MC_ONTO, ROOT, MC_LABELS)
 MC_DATA.calculate_proportions(True)
 
 # Enrichment
@@ -49,8 +50,8 @@ E_LABElS = {'00': '0', '01': '1', '02': '2', '03': '3', '04': '4',
 E_ONTO = {'01': ['00'], '02': ['00'], '03': ['00'], '04': ['00'], '05': ['01'],
           '06': ['01'], '07': ['01'], '08': ['02'], '09': ['02']}
 
-E_DATA = DataTable()
-E_DATA.fill_parameters(E_AB, E_REF_AB, E_ONTO, '00', E_LABElS, True)
+E_DATA = TreeData()
+E_DATA.dag_to_tree(E_AB, E_REF_AB, E_ONTO, '00', E_LABElS, True)
 E_DATA.calculate_proportions(True)
 E_SIGN = E_DATA.make_enrichment_analysis(BINOMIAL_TEST)
 
@@ -220,11 +221,11 @@ class TestSunburstFigure(unittest.TestCase):
         data = copy.deepcopy(E_DATA)
         text_list = get_hover_fig_text(data, ENRICHMENT_A, True)
         self.assertEqual(len(text_list), 10)
-        self.assertEqual(text_list[0], 'P value: 1.0<br>Count: <b>50</b>'
-                                       '<br>Reference count: 100<br>Proportion: <b>100.0%</b>'
+        self.assertEqual(text_list[0], 'P value: 1.0<br>Weight: <b>50</b>'
+                                       '<br>Reference weight: 100<br>Proportion: <b>100.0%</b>'
                                        '<br>Reference proportion: 100.0%<br>ID: 00')
-        self.assertEqual(text_list[5], 'P value: 0.07883064215278136<br>Count: <b>5</b>'
-                                       '<br>Reference count: 20<br>Proportion: <b>10.0%</b>'
+        self.assertEqual(text_list[2], 'P value: 0.07883064215278136<br>Weight: <b>5</b>'
+                                       '<br>Reference weight: 20<br>Proportion: <b>10.0%</b>'
                                        '<br>Reference proportion: 20.0%<br>ID: 05')
 
     @test_for(get_hover_fig_text)
@@ -232,11 +233,11 @@ class TestSunburstFigure(unittest.TestCase):
         data = copy.deepcopy(E_DATA)
         text_list = get_hover_fig_text(data, ENRICHMENT_A, False)
         self.assertEqual(len(text_list), 10)
-        self.assertEqual(text_list[0], 'P value: 1.0<br>Count: <b>50</b><br>'
-                                       'Reference count: 100<br>Proportion: <b>100.0%</b><br>'
+        self.assertEqual(text_list[0], 'P value: 1.0<br>Weight: <b>50</b><br>'
+                                       'Reference weight: 100<br>Proportion: <b>100.0%</b><br>'
                                        'Reference proportion: 100.0%<br>ID: 00')
-        self.assertEqual(text_list[5], 'P value: 0.07883064215278136<br>Count: <b>5</b><br>'
-                                       'Reference count: 20<br>Proportion: <b>10.0%</b><br>'
+        self.assertEqual(text_list[2], 'P value: 0.07883064215278136<br>Weight: <b>5</b><br>'
+                                       'Reference weight: 20<br>Proportion: <b>10.0%</b><br>'
                                        'Reference proportion: 20.0%<br>ID: 05')
 
     @test_for(get_hover_fig_text)
@@ -244,10 +245,10 @@ class TestSunburstFigure(unittest.TestCase):
         data = copy.deepcopy(E_DATA)
         text_list = get_hover_fig_text(data, TOPOLOGY_A, True)
         self.assertEqual(len(text_list), 10)
-        self.assertEqual(text_list[0], 'Count: <b>50</b><br>Reference count: 100'
+        self.assertEqual(text_list[0], 'Weight: <b>50</b><br>Reference weight: 100'
                                        '<br>Proportion: <b>100.0%</b>'
                                        '<br>Reference proportion: 100.0%<br>ID: 00')
-        self.assertEqual(text_list[5], 'Count: <b>5</b><br>Reference count: 20'
+        self.assertEqual(text_list[2], 'Weight: <b>5</b><br>Reference weight: 20'
                                        '<br>Proportion: <b>10.0%</b>'
                                        '<br>Reference proportion: 20.0%<br>ID: 05')
 
@@ -256,8 +257,8 @@ class TestSunburstFigure(unittest.TestCase):
         data = copy.deepcopy(E_DATA)
         text_list = get_hover_fig_text(data, TOPOLOGY_A, False)
         self.assertEqual(len(text_list), 10)
-        self.assertEqual(text_list[0], 'Count: <b>50</b><br>Proportion: <b>100.0%</b><br>ID: 00')
-        self.assertEqual(text_list[5], 'Count: <b>5</b><br>Proportion: <b>10.0%</b><br>ID: 05')
+        self.assertEqual(text_list[0], 'Weight: <b>50</b><br>Proportion: <b>100.0%</b><br>ID: 00')
+        self.assertEqual(text_list[2], 'Weight: <b>5</b><br>Proportion: <b>10.0%</b><br>ID: 05')
 
     @test_for(generate_sunburst_fig)
     def test_generate_sunburst_fig_case1(self):

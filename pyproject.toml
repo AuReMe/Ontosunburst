@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ontosunburst"
-version = "0.0.4"
+version = "0.0.5"
 authors = [
     {name="Pauline Hamon-Giraud", email="pauline.hamongiraud@gmail.com"},
     {name="AuReMe", email="gem-aureme@inria.fr"}
@@ -38,4 +38,4 @@ Documentation = 'https://github.com/AuReMe/Ontosunburst/wiki'
 Repository = 'https://github.com/AuReMe/Ontology_sunburst.git'
 
 [project.scripts]
-ontosunburst = "ontosunburst.__main__:main"
+ontosunburst = "ontosunburst.commands:main"

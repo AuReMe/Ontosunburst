@@ -23,8 +23,8 @@ IDS = 'ID'
 ONTO_ID = 'Onto ID'
 PARENT = 'Parent'
 LABEL = 'Label'
-COUNT = 'Count'
-REF_COUNT = 'Reference count'
+WEIGHT = 'Weight'
+REF_WEIGHT = 'Reference weight'
 PROP = 'Proportion'
 REF_PROP = 'Reference proportion'
 RELAT_PROP = 'Relative proportion'
@@ -45,9 +45,10 @@ PATH_BOUND = 'bound'
 # ==================================================================================================
 # CLASS
 # ==================================================================================================
-class DataTable:
+class TreeData:
+    C_ID = 0
     """
-    DataTable class: stores figure parameters values.
+    TreeData class: stores figure parameters values.
 
     Attributes
     ----------
@@ -74,6 +75,7 @@ class DataTable:
     self.len: int
         Number of sectors
     """
+
     def __init__(self):
         self.ids = list()
         self.onto_ids = list()
@@ -91,18 +93,18 @@ class DataTable:
         string = ''
         data = self.get_data_dict()
         for k, v in data.items():
-            string += f'{k}\n{"-"*len(k)}\n{v}\n'
+            string += f'{k}\n{"-" * len(k)}\n{v}\n'
         return string
 
     def get_data_dict(self):
         return {IDS: self.ids, ONTO_ID: self.onto_ids, LABEL: self.labels, PARENT: self.parents,
-                COUNT: self.count, REF_COUNT: self.ref_count, PROP: self.prop,
+                WEIGHT: self.count, REF_WEIGHT: self.ref_count, PROP: self.prop,
                 REF_PROP: self.ref_prop, RELAT_PROP: self.relative_prop, PVAL: self.p_val}
 
-    def fill_parameters(self, set_abundance: Dict[str, float], ref_abundance: Dict[str, float],
-                        parent_dict: Dict[str, List[str]], root_item: str,
-                        names: Dict[str, str] = None, ref_base: bool = True):
-        """ Fill DataTable list attributes (self.ids, self.onto_ids, self.labels, self.parents,
+    def dag_to_tree(self, set_abundance: Dict[str, float], ref_abundance: Dict[str, float],
+                    parent_dict: Dict[str, List[str]], root_item: str,
+                    names: Dict[str, str] = None, ref_base: bool = True):
+        """ Fill TreeData list attributes (self.ids, self.onto_ids, self.labels, self.parents,
         self.count, self.ref_count)
 
         Parameters
@@ -122,48 +124,48 @@ class DataTable:
         ref_base: bool
             True to have the reference as base, False otherwise
         """
-        if ref_base:
-            for c_onto_id, c_ref_abundance in ref_abundance.items():
-                c_abundance = get_set2_abundance(set_abundance, c_onto_id)
-                self.__fill_id_parameter(c_onto_id, root_item, names, parent_dict, c_abundance,
-                                         c_ref_abundance)
-        else:
-            for c_onto_id, c_abundance in set_abundance.items():
-                c_ref_abundance = get_set2_abundance(ref_abundance, c_onto_id)
-                self.__fill_id_parameter(c_onto_id, root_item, names, parent_dict, c_abundance,
-                                         c_ref_abundance)
+        children_dict = get_children_dict(parent_dict)
+        self.dag_traversal_rec(root_item, children_dict, names, ref_abundance, set_abundance,
+                               ref_base, '')
 
-    def __fill_id_parameter(self, c_onto_id: str, root_item: str, names: Dict[str, str],
-                            parent_dict: Dict[str, List[str]], c_abundance: float,
-                            c_ref_abundance: float):
-        """ Fill DataTable list attributes (self.ids, self.onto_ids, self.labels, self.parents,
-        self.count, self.ref_count) for one concept.
+    def dag_traversal_rec(self, c_onto_id: str, children_dict: Dict[str, List[str]],
+                          names: Dict[str, str], ref_abundance: Dict[str, float],
+                          set_abundance: Dict[str, float], ref_base: bool, p_id: str):
+        """ Fill parameters recursively from the root. Perform a traversing of the DAG and create a
+        vertex of a tree for each visited node (even if already visited, in this case vertex are
+        duplicated with the same label but a different ID)
 
         Parameters
         ----------
         c_onto_id: str
-            Ontology id of the concept
-        root_item: str
-            Root of the ontology
+            Ontology ID of the current concept visited
+        children_dict: Dict[str, List[str]]
+            Dictionary associating for each concept, the list of its -1 children concepts
         names: Dict[str, str]
             Dictionary associating for some or each ontology IDs, its label
-        parent_dict: Dict[str: List[str]]
-            Dictionary associating for each class, its parents classes
-        c_abundance: float
-            Abundance of the concept in the interest set
-        c_ref_abundance: float
-            Abundance of the concept in the reference set
+        ref_abundance: Dict[str, float]
+            Dictionary associating for each class the number of objects found belonging to the class
+            in the reference set
+        set_abundance: Dict[str, float]
+            Dictionary associating for each class the number of objects found belonging to the class
+            in the interest set
+        ref_base: bool
+            True to have the reference as base, False otherwise
+        p_id: str
+            ID (not ontology ID) of the parent concept
         """
-        if c_onto_id != root_item:
+        if (ref_base and c_onto_id in ref_abundance) or \
+                (not ref_base and c_onto_id in set_abundance):
+            self.C_ID += 1
+            c_id = str(self.C_ID)
             c_label = get_name(c_onto_id, names)
-            all_c_ids = get_all_ids(c_onto_id, c_onto_id, parent_dict, root_item, set())
-            for c_id in all_c_ids:
-                self.add_value(m_id=c_id, onto_id=c_onto_id, label=c_label,
-                               count=c_abundance, ref_count=c_ref_abundance,
-                               parent=c_id[len(c_onto_id) + 2:])  # Remove c_label__ prefix
-        else:
-            self.add_value(m_id=c_onto_id, onto_id=c_onto_id, label=c_onto_id,
-                           count=c_abundance, ref_count=c_ref_abundance, parent='')
+            c_ref_abundance = ref_abundance[c_onto_id]
+            c_abundance = get_set2_abundance(set_abundance, c_onto_id)
+            self.add_value(m_id=c_id, onto_id=c_onto_id, label=c_label, count=c_abundance,
+                           ref_count=c_ref_abundance, parent=p_id)
+            for child in children_dict[c_onto_id]:
+                self.dag_traversal_rec(child, children_dict, names, ref_abundance, set_abundance,
+                                       ref_base, c_id)
 
     def add_value(self, m_id: str, onto_id: str, label: str, count: float, ref_count: float,
                   parent: str):
@@ -199,7 +201,7 @@ class DataTable:
         self.len += 1
 
     def calculate_proportions(self, ref_base: bool):
-        """ Calculate DataTable proportion list attributes (self.prop, self.ref_prop,
+        """ Calculate TreeData proportion list attributes (self.prop, self.ref_prop,
         self.relative_prop). If total add relative proportion to +1 parent for branch value.
 
         Parameters
@@ -332,9 +334,12 @@ class DataTable:
         if mode == ROOT_CUT or mode == ROOT_TOTAL_CUT:
             roots_ind = [i for i in range(self.len) if self.relative_prop[i] == MAX_RELATIVE_NB]
             roots = [self.ids[i] for i in roots_ind]
+            roots_lab = [self.labels[i] if self.labels[i] not in self.ids
+                         else self.labels[i] + '_' for i in roots_ind]
+            lab = {roots[i]: roots_lab[i] for i in range(len(roots))}
             self.delete_value(roots_ind)
             if mode == ROOT_CUT:
-                self.parents = [str(x).split('__')[0] if x in roots else x for x in self.parents]
+                self.parents = [lab[x] if x in roots else x for x in self.parents]
             if mode == ROOT_TOTAL_CUT:
                 self.parents = ['' if x in roots else x for x in self.parents]
 
@@ -439,13 +444,13 @@ class DataTable:
                 to_keep_up = path[0]
                 to_keep_do = path[-1]
                 self.parents[to_keep_do] = self.ids[to_keep_up]
-                if len(nested_paths) > 2:
+                if len(path) > 2:
                     self.labels[to_keep_up] += ' ...'
                     self.labels[to_keep_do] = '... ' + self.labels[to_keep_do]
         self.delete_value(to_del)
 
     def delete_value(self, v_index: int or List[int]):
-        """ Delete a sector of DataTable from its index or a list of sectors from a list of indexes
+        """ Delete a sector of TreeData from its index or a list of sectors from a list of indexes
 
         Parameters
         ----------
@@ -461,7 +466,7 @@ class DataTable:
             self.len -= 1
 
     def get_col(self, index: int or List[int] = None) -> List or List[List]:
-        """ Get a DataTable column from its index or a list of columns from a list of indexes.
+        """ Get a TreeData column from its index or a list of columns from a list of indexes.
         Column = all values associated with a sector.
 
         Parameters
@@ -489,38 +494,6 @@ class DataTable:
 # ==================================================================================================
 # FUNCTIONS
 # ==================================================================================================
-def get_all_ids(m_id: str, n_id: str, parent_dict: Dict[str, List[str]], root: str,
-                all_ids: Set[str]) -> Set[str]:
-    """ Return recursively all unique IDs associated with a label. The IDs correspond to the path
-    in the tree from the label to the root.
-
-    Parameters
-    ----------
-    m_id: str
-        Input ID
-    n_id
-        New ID
-    parent_dict: Dict[str, List[str]]
-        Dictionary associating for each class, its parents classes
-    root: str
-        Name of the root item of the ontology
-    all_ids: Set[str]
-        Set of unique IDs associated with a concept label.
-
-    Returns
-    -------
-    Set[str]
-        Set of all unique IDs associated with a concept label.
-    """
-    parents = parent_dict[m_id]
-    for p in parents:
-        nn_id = n_id + '__' + p
-        if p == root:
-            all_ids.add(nn_id)
-        else:
-            all_ids = get_all_ids(p, nn_id, parent_dict, root, all_ids)
-    return all_ids
-
 
 def get_set2_abundance(set2_abundances: Dict[str, float] or None, c_label: str) -> float:
     """ Get the set2 abundance of a set1 concept.
@@ -552,3 +525,25 @@ def get_name(c_onto_id, names):
     else:
         c_label = c_onto_id
     return c_label
+
+
+def get_children_dict(parent_dict: Dict[str, List[str]]) -> Dict[str, List[str]]:
+    """ Create the children dictionary from the parents dictionary.
+    Parameters
+    ----------
+    parent_dict: Dict[str, List[str]]
+        Dictionary associating for each class, its parents classes
+    Returns
+    -------
+    Dict[str, List[str]]
+        Dictionary associating for each class, its children classes
+    """
+    children_dict = dict()
+    for c, ps in parent_dict.items():
+        for p in ps:
+            if p not in children_dict.keys():
+                children_dict[p] = list()
+            if c not in children_dict.keys():
+                children_dict[c] = list()
+            children_dict[p].append(c)
+    return children_dict
