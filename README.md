@@ -56,15 +56,18 @@ pip install -e .
 
 ### Availabilities
 
-#### 5 **Ontologies :**
+#### **Available Ontologies :**
 
-With local files :
-- MetaCyc (compounds, reactions, pathways)
-- EC (EC-numbers)
-- KEGG Ontology (modules, pathways, ko, ko_transporter, metabolite, metabolite_lipid)
-- ChEBI (chebi: chebi classes + chebi_r: chebi roles)
-- Gene Ontology (go_bp: biological process + go_mf: molecular function + go_cc:
-cellular component + go: aggregation of 3)
+- Metacyc classes *v26.0* (compounds, reactions, pathways): `metacyc`
+- Enzyme commission numbers *v05 feb 2025* (EC-numbers): `ec`
+- Kegg classes *v113.0* (modules, pathways, ko, ko_transporter, metabolite, metabolite_lipid): `kegg`
+- Gene Ontology Cellular Components classes *v06 feb 2025* : `go_cc`
+- Gene Ontology Molecular Functions classes *v06 feb 2025* : `go_mf`
+- Gene Ontology Biological Process classes *v06 feb 2025* : `go_bp`
+- Gene Ontology classes (Fusion of 3) *v06 feb 2025* : `go`
+- ChEBI classes *v239*: `chebi`
+- ChEBI roles: *v239*: `chebi_r`
+
 
 Personal ontology possible :
 - Define all the ontology classes relationship in 
