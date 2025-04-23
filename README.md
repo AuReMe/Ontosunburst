@@ -22,7 +22,6 @@ Requirements from `requirements.txt`
 - numpy>=1.26.1
 - plotly>=5.17.0
 - scipy>=1.11.3
-- SPARQLWrapper>=2.0.0
 - pandas>=1.5.3
 
 ### Optional
