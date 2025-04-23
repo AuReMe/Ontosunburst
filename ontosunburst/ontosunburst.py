@@ -97,7 +97,7 @@ def ontosunburst(interest_set: List[str],
         Root item of the ontology  (to precise if tailored ontology).
     id_to_label_input: str or Dict[str, str] (optional, default=None)
         Path to ID-LABELS association json file or ID-LABELS association dictionary.
-        If None default files will be used. Use if Use if tailored ontology or alternative
+        If None default files will be used. Use if tailored ontology or alternative
         (modified, updated, ...) default ontology.
     labels: bool (optional, default=True)
         True to show labels as sunburst sectors labels, False to show ID as sunburst sectors labels.

@@ -266,6 +266,7 @@ class TestSunburstFigure(unittest.TestCase):
         fig = generate_sunburst_fig(data, 'case1', analysis=ENRICHMENT_A, write_fig=False,
                                     test=HYPERGEO_TEST, ref_set=True, significant=E_SIGN)
         w_fig_file = os.path.join('test_files', 'fig_case1.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(generate_sunburst_fig)
@@ -274,6 +275,7 @@ class TestSunburstFigure(unittest.TestCase):
         fig = generate_sunburst_fig(data, 'case2', analysis=ENRICHMENT_A, write_fig=False,
                                     test=BINOMIAL_TEST, significant=E_SIGN)
         w_fig_file = os.path.join('test_files', 'fig_case2.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(generate_sunburst_fig)
@@ -286,6 +288,7 @@ class TestSunburstFigure(unittest.TestCase):
                                     bg_color='#222222', font_color='#eeeeee', font_size=25,
                                     table_legend='Number')
         w_fig_file = os.path.join('test_files', 'fig_case3.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(generate_sunburst_fig)
@@ -294,4 +297,5 @@ class TestSunburstFigure(unittest.TestCase):
         fig = generate_sunburst_fig(data, 'case4', analysis=TOPOLOGY_A, bg_color='black',
                                     font_color='white', write_fig=False)
         w_fig_file = os.path.join('test_files', 'fig_case4.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))

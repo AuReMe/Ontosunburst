@@ -151,6 +151,7 @@ class TestOntosunburstCustomOnto(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_TOTAL_CUT, ref_base=True,
                            show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test1.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -161,6 +162,7 @@ class TestOntosunburstCustomOnto(unittest.TestCase):
                            ontology_dag_input=C_ONTO, id_to_label_input=C_LABELS, labels=False,
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT, ref_base=False, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test2.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -172,6 +174,7 @@ class TestOntosunburstCustomOnto(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_UNCUT, ref_base=False,
                            show_leaves=False, bg_color='#ddddcc')
         w_fig_file = os.path.join('test_files', 'test3.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     # ENRICHMENT : CUSTOM ONTO
@@ -184,6 +187,7 @@ class TestOntosunburstCustomOnto(unittest.TestCase):
                            ontology_dag_input=E_ONTO, id_to_label_input=E_LABElS, labels=True,
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT, ref_base=True, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test4.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -195,6 +199,7 @@ class TestOntosunburstCustomOnto(unittest.TestCase):
                            test=HYPERGEO_TEST, root_cut=ROOT_UNCUT, ref_base=False,
                            show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test5.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -206,6 +211,7 @@ class TestOntosunburstCustomOnto(unittest.TestCase):
                            ontology_dag_input=E_ONTO, id_to_label_input=E_LABElS, labels=True,
                            root_cut=ROOT_UNCUT, ref_base=False, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test6.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
 
@@ -246,6 +252,7 @@ class TestOntosunburstMetaCyc(unittest.TestCase):
                            ontology_dag_input=None, labels=True,
                            root_cut=ROOT_CUT, ref_base=True, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_mc1.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -256,6 +263,7 @@ class TestOntosunburstMetaCyc(unittest.TestCase):
                            ontology_dag_input=None, id_to_label_input={'Acids': 'ACIDS !!'},
                            test=HYPERGEO_TEST, root_cut=ROOT_CUT, ref_base=False, show_leaves=False)
         w_fig_file = os.path.join('test_files', 'test_mc2.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -266,6 +274,7 @@ class TestOntosunburstMetaCyc(unittest.TestCase):
                            ontology_dag_input=None, test=HYPERGEO_TEST, root_cut=ROOT_CUT,
                            ref_base=False, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_mc3.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     # Enrichment
@@ -276,6 +285,7 @@ class TestOntosunburstMetaCyc(unittest.TestCase):
                            analysis=ENRICHMENT_A, output='mc4', write_output=False,
                            test=HYPERGEO_TEST, root_cut=ROOT_CUT, ref_base=False, show_leaves=False)
         w_fig_file = os.path.join('test_files', 'test_mc4.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -285,6 +295,7 @@ class TestOntosunburstMetaCyc(unittest.TestCase):
                            analysis=ENRICHMENT_A, output='mc5', write_output=False,
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT, ref_base=True, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_mc5.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     # Pathways
@@ -296,6 +307,7 @@ class TestOntosunburstMetaCyc(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=True, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_mc6.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     # Reactions
@@ -307,6 +319,7 @@ class TestOntosunburstMetaCyc(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=True, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_mc7.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -317,6 +330,7 @@ class TestOntosunburstMetaCyc(unittest.TestCase):
                            test=HYPERGEO_TEST, root_cut=ROOT_CUT, path_cut=PATH_BOUND,
                            ref_base=False, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_mc8.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -327,6 +341,7 @@ class TestOntosunburstMetaCyc(unittest.TestCase):
                            test=HYPERGEO_TEST, root_cut=ROOT_CUT, path_cut=PATH_HIGHER,
                            ref_base=True, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_mc9.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
 
@@ -350,6 +365,7 @@ class TestOntosunburstEC(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=True, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_ec1.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -360,6 +376,7 @@ class TestOntosunburstEC(unittest.TestCase):
                            labels=False, test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=True, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_ec2.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -371,6 +388,7 @@ class TestOntosunburstEC(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=True, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_ec3.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
 
@@ -391,6 +409,7 @@ class TestOntosunburstKegg(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=False, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_kg1.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
 
@@ -413,6 +432,7 @@ class TestOntosunburstChEBI(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=True, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_ch1.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -423,6 +443,7 @@ class TestOntosunburstChEBI(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=False, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_ch2.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -433,6 +454,7 @@ class TestOntosunburstChEBI(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=True, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_ch3.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
 
@@ -446,6 +468,7 @@ class TestOntosunburstChEBIRoles(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=True, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_chr1.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -456,6 +479,7 @@ class TestOntosunburstChEBIRoles(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=False, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_chr2.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -466,6 +490,7 @@ class TestOntosunburstChEBIRoles(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=True, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_chr3.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
 
@@ -490,6 +515,7 @@ class TestOntosunburstGO(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=False, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_go_bp1.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -500,6 +526,7 @@ class TestOntosunburstGO(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=False, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_go_mf1.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -510,6 +537,7 @@ class TestOntosunburstGO(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=False, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_go_cc1.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
     @test_for(ontosunburst)
@@ -520,5 +548,6 @@ class TestOntosunburstGO(unittest.TestCase):
                            test=BINOMIAL_TEST, root_cut=ROOT_CUT,
                            ref_base=False, show_leaves=True)
         w_fig_file = os.path.join('test_files', 'test_go1.json')
+        # save_fig_json(fig, w_fig_file)
         self.assertTrue(are_fig_dict_equals(fig, w_fig_file))
 
