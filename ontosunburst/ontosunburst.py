@@ -195,7 +195,6 @@ def _global_analysis(analysis, interest_concepts, abundances, scores, reference_
         ontology_dag = reduce_d_ontology(ontology_dag, calculated_weights)
         id_to_label = reduce_d_ontology(id_to_label, calculated_weights)
 
-    # WRITE CONCEPTS CLASSES IN TSV OUTPUT FILE ---------------------------------------------------
     # if write_output:
     #     write_concepts_classes(ontology, concepts_all_classes, output, id_to_label)
 

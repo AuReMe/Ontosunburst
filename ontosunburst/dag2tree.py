@@ -210,7 +210,7 @@ class TreeData:
             True if reference base representation
         """
         # Get total proportion
-        max_abondance = int(np.nanmax(self.count))
+        max_abondance = float(np.nanmax(self.count))
         self.prop = [x / max_abondance for x in self.count]
         # Get reference proportion
         max_ref_abondance = np.max(self.ref_count)

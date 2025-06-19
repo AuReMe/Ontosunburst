@@ -1,5 +1,5 @@
 [![](https://img.shields.io/badge/python-3.10-blue.svg)]()
-[![](https://img.shields.io/badge/version-0.1.0-green.svg)](https://github.com/AuReMe/Ontosunburst/releases/tag/v0.1.0)
+[![](https://img.shields.io/badge/version-0.1.1-green.svg)](https://github.com/AuReMe/Ontosunburst/releases/tag/v0.1.1)
 [![](https://img.shields.io/badge/documentation-Wiki-orange.svg)](https://github.com/AuReMe/Ontosunburst/wiki)
 
 
